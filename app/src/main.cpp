@@ -2,8 +2,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-#define SLEEP_TIME_MS 1000
-
 /* The devicetree node identifiers for the on board leds */
 #define LED_NODE_G DT_ALIAS(led0)
 #define LED_NODE_O DT_ALIAS(led1)
@@ -31,14 +29,26 @@ int main(void)
     
 
     while (1) {
-        if ((gpio_pin_toggle_dt(&ledg) < 0) || (gpio_pin_toggle_dt(&ledo) < 0)
-            || (gpio_pin_toggle_dt(&ledr) < 0))  
-            return 0;
+        if (IS_ENABLED(CONFIG_LED_CUSTOM_PATTERN)) {
+            if ((gpio_pin_toggle_dt(&ledg) < 0) || (gpio_pin_toggle_dt(&ledo) < 0)
+                || (gpio_pin_toggle_dt(&ledr) < 0))  
+                return 0;
 
-        led_state = !led_state;
-        total_state = (led_state << 2) | (!led_state << 1) | (led_state);
-        LOG_INF("LED state: 0x%x", total_state);
-        k_msleep(SLEEP_TIME_MS);
+            led_state = !led_state;
+            total_state = (led_state << 2) | (!led_state << 1) | (led_state);
+            LOG_INF("LED state: 0x%x", total_state);
+        } else {
+            if(gpio_pin_toggle_dt(&ledg) < 0)
+                return 0;
+            led_state = !led_state;
+            LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
+        }
+#ifdef CONFIG_LED_DEBUG_ENABLED
+        LOG_INF("LED Params: Brightness=%d, FadeTime=%d, SleepTime=%d, CustomPattern=%d",
+            CONFIG_LED_BRIGHTNESS, CONFIG_LED_FADE_DURATION,
+            CONFIG_BLINK_TIME_MS, IS_ENABLED(CONFIG_LED_CUSTOM_PATTERN));
+#endif
+        k_msleep(CONFIG_BLINK_TIME_MS);
     }
     return 0;
 }
