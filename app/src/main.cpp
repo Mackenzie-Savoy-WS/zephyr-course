@@ -29,6 +29,7 @@ int main(void)
             return 0;
 
         led_state = !led_state;
+        
         LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
         
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
