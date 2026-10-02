@@ -6,7 +6,7 @@ three ways:
 
 ---
 
-## Assignment 2
+## l2-task1
 
 This blinky application was modified to utilize the three main leds on the nucleo-H7S3L8
 (green, orange, red)
@@ -14,6 +14,13 @@ This blinky application was modified to utilize the three main leds on the nucle
 LOG_INF logs a concatnated state of the leds 
 0x5 -> 0b101 -> Green & Red LED on
 0x2 -> 0b010 -> Orange LED on
+
+## l5-task1
+
+**Note** the led example from the previous tasks can be built and ran along with the 
+built-in zephyr `hello_world` example from the zephyr root. 
+
+as such `hello_world` is not added to the repo and the led example from the previous tasks remain
 
 ## Manual Zephyr Setup
 
