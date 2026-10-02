@@ -1,0 +1,9 @@
+if BOARD_MY_BOARD
+
+config BOARD_EARLY_INIT_HOOK
+	default y
+
+config BOARD_LATE_INIT_HOOK
+	default y
+
+endif # BOARD_MY_BOARD

@@ -1,0 +1,16 @@
+identifier: our_board
+name: Our Board
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+ram: 640
+flash: 64
+supported:
+  - gpio
+  - uart
+  - watchdog
+  - entropy
+  - adc
+  - octospi
+vendor: Mackenzie
