@@ -1,6 +1,0 @@
-board:
-  name: my_board
-  full_name: My Board
-  vendor: st
-  socs:
-    - name: stm32h7s3xx
