@@ -1,6 +1,0 @@
-board:
-  name: our_board
-  full_name: Our Board
-  vendor: Mackenzie
-  socs:
-    - name: stm32h7s3xx

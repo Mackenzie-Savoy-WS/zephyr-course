@@ -1,0 +1,9 @@
+description: Our simple GPIO Driver
+compatible: our,driver
+include: base.yaml
+
+properties:
+  led:
+    description: The GPIO pin for the LED
+    type: phandle
+    required: true
