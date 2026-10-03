@@ -4,6 +4,11 @@
 		led = <&yellow_led>;
 		status = "okay";
 	};
+	our_driver1: our_driver1 {
+		compatible = "our,driver";
+		led = <&red_led>;
+		status = "okay";
+	};
 
 	aliases {
 		app-led = &green_led;
