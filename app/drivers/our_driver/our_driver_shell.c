@@ -2,6 +2,8 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/shell/shell.h>
+#include <zephyr/shell/shell_string_conv.h>
+#include <our_driver.h>
 
 #define DT_DRV_COMPAT our_driver
 
@@ -63,6 +65,30 @@ static int cmd_info(const struct shell *sh, size_t argc, char **argv) {
     return 0;
 }
 
+static int cmd_led(const struct shell *sh, size_t argc, char **argv) {
+    const struct device *dev = get_our_dev(sh, argv[1]);
+    if (dev == NULL) {
+        return -ENODEV;
+    }
+    if (argc < 3) {
+        shell_error(sh, "Missing value\nUsage: led <device> <0|1>");
+        return -EINVAL;
+    }
+    int err = 0;
+    long enabled = shell_strtol(argv[2], 10, &err);
+    if (err != 0 || enabled < 0 || enabled > 1) {
+        shell_error(sh, "Invalid value '%s', must be 0 or 1", argv[2]);
+        return -EINVAL;
+    }
+    int ret = our_driver_set_led_enabled(dev, enabled == 1);
+    if (ret < 0) {
+        shell_error(sh, "our_driver_set_led_enabled failed: %d", ret);
+        return ret;
+    }
+    shell_print(sh, "%s: LED %s", dev->name, enabled ? "enabled" : "disabled");
+    return 0;
+}
+
 // Tab completion for our_driver targets
 static void device_name_get(size_t idx, struct shell_static_entry *entry) {
     entry->syntax = (idx < ARRAY_SIZE(our_devs)) ? our_devs[idx]->name : NULL;
@@ -76,6 +102,7 @@ SHELL_STATIC_SUBCMD_SET_CREATE(sub_our_driver,
     SHELL_CMD_ARG(fetch, &dsub_device_name, "Fetch a sample\nUsage: fetch <device>", cmd_fetch, 2, 0),
     SHELL_CMD_ARG(read, &dsub_device_name, "Read a channel\nUsage: read <device>", cmd_read, 2, 0),
     SHELL_CMD_ARG(info, &dsub_device_name, "Print device name and ready state\nUsage: info <device>", cmd_info, 2, 0),
+    SHELL_CMD_ARG(led, &dsub_device_name, "Enable/disable LED on fetch\nUsage: led <device> <0|1>", cmd_led, 2, 1),
     SHELL_SUBCMD_SET_END
 );
 

@@ -42,9 +42,11 @@ int main(void)
         LOG_INF("Our driver device not ready");
         return 0;
     }
+    
     while (1) {
+        // Disable for l7 task 2
         // Every 10 heartbeats LED-enabled flag
-        if (beat_count++ % 10 == 0) {
+        /*if (beat_count++ % 10 == 0) {
             led_enabled = !led_enabled;
             our_driver_set_led_enabled(dev, led_enabled);
             our_driver_set_led_enabled(dev1, !led_enabled);
@@ -63,9 +65,9 @@ int main(void)
         } else {
             sensor_channel_get(dev, SENSOR_CHAN_ALL, &val);
             sensor_channel_get(dev1, SENSOR_CHAN_ALL, &val1);
-        }
+        }*/
         
-        k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+        k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS); 
     }
     return 0;
 }
